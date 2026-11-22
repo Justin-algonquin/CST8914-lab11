@@ -1,55 +1,36 @@
-.container {
-  width: 80%;
-  max-width: 600px;
-  margin: 50px auto;
-}
+const buttons = Array.from(document.querySelectorAll("button.accordion"));
 
-.accordion-heading {
-  margin: 0;
-}
+buttons.forEach((button, index) => {
+  const panel = document.getElementById(button.getAttribute("aria-controls"));
 
-button.accordion {
-  width: 100%;
-  background-color: whitesmoke;
-  border: none;
-  text-align: left;
-  padding: 15px 20px;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s linear;
-}
+  button.addEventListener("click", () => {
+    const opening = panel.hidden;
+    panel.hidden = !opening;
+    button.setAttribute("aria-expanded", String(opening));
+    button.classList.toggle("is-open", opening);
+  });
 
-button.accordion::after {
-  font-family: FontAwesome;
-  content: "\f150";
-  font-size: 18px;
-  float: right;
-}
+  button.addEventListener("keydown", (event) => {
+    let next;
 
-button.accordion.is-open::after {
-  content: "\f151";
-}
+    switch (event.key) {
+      case "ArrowDown":
+        next = (index + 1) % buttons.length;
+        break;
+      case "ArrowUp":
+        next = (index - 1 + buttons.length) % buttons.length;
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = buttons.length - 1;
+        break;
+      default:
+        return;
+    }
 
-button.accordion:hover,
-button.accordion.is-open {
-  background-color: #ddd;
-}
-
-button.accordion:focus-visible {
-  outline: 3px solid #005fcc;
-  outline-offset: 2px;
-  position: relative;
-  z-index: 1;
-}
-
-.accordion-content {
-  background-color: white;
-  border-left: 1px solid whitesmoke;
-  border-right: 1px solid whitesmoke;
-  padding: 0 20px;
-}
-
-.accordion-content[hidden] {
-  display: none;
-}
+    event.preventDefault();
+    buttons[next].focus();
+  });
+});
