@@ -1,46 +1,55 @@
-const accordionBtns = document.querySelectorAll(".accordion");
+.container {
+  width: 80%;
+  max-width: 600px;
+  margin: 50px auto;
+}
 
-accordionBtns.forEach((button, index) => {
-  const panel = document.getElementById(
-    button.getAttribute("aria-controls")
-  );
+.accordion-heading {
+  margin: 0;
+}
 
-  button.addEventListener("click", () => {
-    const isExpanded =
-      button.getAttribute("aria-expanded") === "true";
+button.accordion {
+  width: 100%;
+  background-color: whitesmoke;
+  border: none;
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+}
 
-    button.setAttribute("aria-expanded", String(!isExpanded));
-    button.classList.toggle("is-open", !isExpanded);
-    panel.hidden = isExpanded;
-  });
+button.accordion::after {
+  font-family: FontAwesome;
+  content: "\f150";
+  font-size: 18px;
+  float: right;
+}
 
-  // Additional keyboard navigation between accordion headers.
-  button.addEventListener("keydown", (event) => {
-    let targetIndex;
+button.accordion.is-open::after {
+  content: "\f151";
+}
 
-    switch (event.key) {
-      case "ArrowDown":
-        targetIndex = (index + 1) % accordionBtns.length;
-        break;
+button.accordion:hover,
+button.accordion.is-open {
+  background-color: #ddd;
+}
 
-      case "ArrowUp":
-        targetIndex =
-          (index - 1 + accordionBtns.length) % accordionBtns.length;
-        break;
+button.accordion:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  position: relative;
+  z-index: 1;
+}
 
-      case "Home":
-        targetIndex = 0;
-        break;
+.accordion-content {
+  background-color: white;
+  border-left: 1px solid whitesmoke;
+  border-right: 1px solid whitesmoke;
+  padding: 0 20px;
+}
 
-      case "End":
-        targetIndex = accordionBtns.length - 1;
-        break;
-
-      default:
-        return;
-    }
-
-    event.preventDefault();
-    accordionBtns[targetIndex].focus();
-  });
-});
+.accordion-content[hidden] {
+  display: none;
+}
